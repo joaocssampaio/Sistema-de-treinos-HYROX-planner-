@@ -9,40 +9,53 @@ def clear():
     else:
         os.system("cls")
 
+arquivo = open("Sistema de Treinos.txt", "a")
+arquivo.close()
+
 while True:
     print("==========BEM VINDO AO HYROX PLANNER==========\n")
-    funcao = int(input("Você deseja:"
+    opcao_escolhida = input("Você deseja:" 
     "\n[1] Adicionar\n"
       "[2] Visualizar\n"
       "[3] Editar\n"
       "[4] Excluir\n"
       "[5] Parar \n"
-        "\nRESPOSTA: ")
-    )
+      "\nRESPOSTA: ")
+    
     clear()
-
-    if funcao == 1:
-        treino = open("Sistema de Treinos.txt", "a")
-        nome_treino = input("Digite o nome do treino: ")
-        clear()
+    
+    if opcao_escolhida == "1":
+        treino = open("Sistema de Treinos.txt", "r")
+        conteudo = treino.read()
+        treino.close()
 
         while True:
-            tipo_treino = int(input("[1] CORRIDA / [2] FORÇA / [3] SIMULADO HYROX"
-            "\n\nDigite o tipo de treino entre os disponíveis: "))
+            nome_treino = input("Digite o nome do treino: ")
+            if f"NOME DO TREINO: {nome_treino.upper().strip()}" in conteudo:
+                clear()
+                print("O treino ja existe!\n")
+                continue
+            else:
+                clear()
+                break
 
-            if tipo_treino == 1:
+        while True:
+            tipo_treino = input("[1] CORRIDA / [2] FORÇA / [3] SIMULADO HYROX"
+            "\n\nDigite o tipo de treino entre os disponíveis: " )
+
+            if tipo_treino == "1":
                 tipo = "CORRIDA"
                 break
 
-            elif tipo_treino == 2:
+            elif tipo_treino == "2":
                 tipo = "FORÇA"
                 break
-
-            elif tipo_treino == 3:
-                tipo = "SIMULDADO HYROX"
+            
+            elif tipo_treino == "3":
+                tipo = "SIMULADO HYROX"
                 break
-
-            else:
+            
+            else: 
                 clear()
                 print("Resposta inválida!")
                 continue
@@ -55,48 +68,48 @@ while True:
         clear()
 
         while True:
-            intensidade_treino = int(input("[1] - LEVE / [2] - MODERADO / [3] - PESADO"
-            "\nDigite o número de intensidade: "))
+                intensidade_treino = input("[1] - LEVE / [2] - MODERADO / [3] - PESADO"
+                "\nDigite o número de intensidade: ")
+                
+                if intensidade_treino == "1":
+                    intensidade_final = "Treino Leve"
+                    break
 
-            if intensidade_treino == 1:
-                intensidade_final = "Treino Leve"
-                break
+                elif intensidade_treino == "2":
+                    intensidade_final = "Treino Moderado"
+                    break
 
-            elif intensidade_treino == 2:
-                intensidade_final = "Treino Moderado"
-                break
-
-            elif intensidade_treino == 3:
-                intensidade_final = "Treino Pesado"
-                break
-
-            else:
-                clear()
-                print("Resposta Inválida!")
-                continue
+                elif intensidade_treino == "3":
+                    intensidade_final = "Treino Pesado"
+                    break
+                
+                else:
+                    clear()
+                    print("Resposta Inválida!")
+                    continue
         clear()
-
-        treino.write("Dados do Usuário:"
-                     "\nNOME DO TREINO: " + nome_treino +
-                     "\nTIPO DE TREINO: " + tipo +
-                     "\nDATA DO TREINO: " + data_treino +
-                     "\nDURAÇÃO DO TREINO: " + duracao_treino +
-                     "\nINTENSIDADE DO TREINO: " + intensidade_final +
-                     "\n\n")
-        treino.close()
+        
+        treino = open("Sistema de Treinos.txt", "a")
+        treino.write("Dados do Treino:" 
+                        "\nNOME DO TREINO: " + nome_treino.upper().strip() + 
+                        "\nTIPO DE TREINO: " + tipo + 
+                        "\nDATA DO TREINO: " + data_treino + 
+                        "\nDURAÇÃO DO TREINO: " + duracao_treino +
+                        "\nINTENSIDADE DO TREINO: " + intensidade_final 
+                        + "\n\n")
         clear()
         print("Treino Adicionado com Sucesso! \n\n")
+        treino = open("Sistema de Treinos.txt", "r")
+        treino.close()
 
 
-    elif funcao == 2:
+    elif opcao_escolhida == "2":
         treino = open("Sistema de Treinos.txt", "r")
         clear()
         print(treino.read())
-
         treino.close()
-
         resposta = input("Você quer continuar? s/n \nRESPOSTA: ")
-
+        
         if resposta == "s":
             clear()
             continue
@@ -104,45 +117,53 @@ while True:
         elif resposta == "n":
             break
 
-        else:
+        else: 
             print("RESPOSTA INVÁLIDA!")
+    
 
-
-    elif funcao == 3:
+    elif opcao_escolhida == "3":
         treino = open("Sistema de Treinos.txt", "r")
         conteudo = treino.read()
+        treinos = conteudo.split("\n\n") 
         treino.close()
-
-        treinos = conteudo.split("\n\n")
 
         while True:
             treino_antigo = input("Digite qual treino deseja editar: ")
-            if treino_antigo in conteudo:
+            if f"NOME DO TREINO: {treino_antigo.upper()}" in conteudo:
                 clear()
                 break
             else:
                 print("Treino Inexistente!!\n\n")
                 continue
-
-        treino_novo = input("Digite o novo treino desejado: ")
-        clear()
+        
+        while True:      
+            treino_novo = input("Digite o novo treino desejado: ")
+            clear()
+            if  f"NOME DO TREINO: {treino_novo.upper()}" == f"NOME DO TREINO: {treino_antigo.upper()}" or f"NOME DO TREINO: {treino_novo.upper()}" not in conteudo:
+                clear()
+                break
+            
+            else: 
+                clear()
+                print("O treino ja existe!\n")
+                continue
 
         while True:
-            tipo_novo = int(input("(1)CORRIDA / (2)FORÇA / (3)SIMULADO HYROX "
-            "\nDigite o novo tipo de treino entre os disponíveis: "))
+            tipo_novo = input("(1)CORRIDA / (2)FORÇA / (3)SIMULADO HYROX "
+            "\nDigite o novo tipo de treino entre os disponíveis: ")
 
-            if tipo_novo == 1:
+            if tipo_novo == "1":
                 tipo = "CORRIDA"
                 break
 
-            elif tipo_novo == 2:
+            elif tipo_novo == "2":
                 tipo = "FORÇA"
                 break
-
-            elif tipo_novo == 3:
-                tipo = "SIMULDADO HYROX"
+            
+            elif tipo_novo == "3":
+                tipo = "SIMULADO HYROX"
                 break
-
+            
             else:
                 clear()
                 print("Opção Inválida!")
@@ -156,35 +177,35 @@ while True:
         clear()
 
         while True:
-            intensidade_treino = int(input("[1] - LEVE / [2] - MODERADO / [3] - PESADO "
-            "\nDigite o número de intensidade: "))
+            intensidade_treino = input("[1] - LEVE / [2] - MODERADO / [3] - PESADO "
+            "\nDigite o número de intensidade: ")
 
-            if intensidade_treino == 1:
+            if intensidade_treino == "1":
                 intensidade_final = "Treino Leve"
                 break
 
-            elif intensidade_treino == 2:
+            elif intensidade_treino == "2":
                 intensidade_final = "Treino Moderado"
                 break
-
-            elif intensidade_treino == 3:
+            
+            elif intensidade_treino == "3":
                 intensidade_final = "Treino Pesado"
                 break
-
+            
             else:
                 clear()
                 print("Resposta Inválida!")
                 continue
 
-        dados_novos = ("Dados do Usuário: "
-                       "\nNOME DO TREINO: " + treino_novo +
+        dados_novos = ("Dados do Treino: "
+                       "\nNOME DO TREINO: " + treino_novo.upper().strip() + 
                        "\nTIPO DE TREINO: " + tipo +
-                       "\nDATA DO TREINO: " + data_nova +
-                       "\nDURAÇÃO DO TREINO: " + duracao_nova +
+                       "\nDATA DO TREINO: " + data_nova + 
+                       "\nDURAÇÃO DO TREINO: " + duracao_nova + 
                        "\nINTENSIDADE DO TREINO: " + intensidade_final)
 
         for i in range(len(treinos)):
-            if "NOME DO TREINO: " + treino_antigo in treinos[i]:
+            if "NOME DO TREINO: " + treino_antigo.upper().strip() in treinos[i]:
                 treinos[i] = dados_novos
 
         novo_conteudo = "\n\n".join(treinos)
@@ -196,39 +217,42 @@ while True:
         print("Treino editado com Sucesso!")
 
 
-    elif funcao == 4:
+    elif opcao_escolhida == "4":
         treino = open("Sistema de Treinos.txt", "r")
         conteudo = treino.read()
         treino.close()
         treinos = conteudo.split("\n\n")
-
-        while True:
+        
+        while True: 
             treino_excluir = input("Digite o treino que deseja excluir: ")
-            if treino_excluir in conteudo:
+            if f"NOME DO TREINO: " + treino_excluir.upper().strip() in conteudo:
                 clear()
                 break
             else:
+                clear()
+                print("Treino inexistente!\n")
                 continue
 
         conjunto_fica = []
-
+        
         for i in range(len(treinos)):
-            if "NOME DO TREINO: " + treino_excluir in treinos[i]:
+            if "NOME DO TREINO: " + treino_excluir.upper().strip() in treinos[i]:
                 continue
             else:
                 conjunto_fica.append(treinos[i])
-
+                
         conjunto_fica = "\n\n".join(conjunto_fica)
-
+        
         treino = open("Sistema de Treinos.txt", "w")
         treino.write(conjunto_fica)
         treino.close()
         print("Treino Excluído Com Sucesso!\n\n")
+        
 
-
-    elif funcao == 5:
+    elif opcao_escolhida == "5":
         print("Programa Finalizado!")
         break
+    
 
     else:
         print("Opção inválida!")
