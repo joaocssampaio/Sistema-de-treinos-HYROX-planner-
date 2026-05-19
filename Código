@@ -2,6 +2,126 @@ import os
 os.system("clear")
 import platform
 
+def controledesempenho(nomedotreino):
+
+    desemp = {} 
+
+    # ================= ABRE O ARQUIVO ===================
+
+    file = open("Sistema de Treinos.txt", "r")
+    conteudo = file.read()
+    file.close()
+
+    treinos = conteudo.split("\n\n")
+
+    if "EXERCICIOS:" in treinos[-1]: 
+
+        desempenhos = (treinos[-1]).split("\n---\n")
+
+        achou = False
+        for i in range(1, len(desempenhos)-1): # SE DER ERRO VAI SER AQUI PE EU ESQUECI
+            if nomedotreino + "\n" in desempenhos[i]:
+                esse_desempenho = desempenhos[i]
+                index = i
+                achou = True
+                break
+        
+        if achou:
+
+            linhas = esse_desempenho.split("\n")
+            
+            i = 1
+            while i <= len(linhas)-4:
+                desemp[linhas[i]] = [linhas[i+1].split("\t")[2:-1],
+                                    linhas[i+2].split("\t")[1:-1],
+                                    linhas[i+3].split("\t")[2:-1],
+                                    linhas[i+4].split("\t")[1:-1]]
+                i += 5
+        
+        else:
+            desempenhos.append("valor que vai ser trocado dps")
+            index = len(desempenhos)-1
+                
+    else:
+        desempenhos = ["EXERCICIOS:", "valor que vai ser trocado dps"]
+        index = 1
+        treinos.append(desempenhos)
+
+
+    # ====================== ADICIONAR NOVA LEITURA / CRIAR EXERCICIO =============
+
+    def add(exercicio):
+        #exercicio é o nome do exercicio
+
+        if exercicio not in desemp.keys():
+            desemp[exercicio] = [[],[],[],[]] #se o exercicio não existir ainda, criar uma matriz pra ele
+
+        tempo = input("Insira o tempo: ")
+        dist = input("Insira a distância: ")
+        carga = input("Insira a carga: ")
+        rep = input("Insira a quantidade de repetições: ")
+
+        desemp[exercicio][0].append(tempo)
+        desemp[exercicio][1].append(dist)
+        desemp[exercicio][2].append(carga)
+        desemp[exercicio][3].append(rep)
+
+        print(f"Exercício {exercicio} atualizado!\n")
+
+    # ====================== SALVAR MATRIZ =========================
+
+    def salvarmatriz():
+        dados = nomedotreino
+
+        for exercicio in desemp.keys():
+            dados += "\n" + exercicio.upper()
+
+            dados += ("\nTempos:\t\t")
+            for d in desemp[exercicio][0]:
+                dados += (d + "\t")
+
+            dados += ("\nDistâncias:\t")
+            for d in desemp[exercicio][1]:
+                dados += (d + "\t")
+
+            dados += ("\nCargas:\t\t")
+            for d in desemp[exercicio][2]:
+                dados += (d + "\t")
+
+            dados += ("\nRepetições:\t")
+            for d in desemp[exercicio][3]:
+                dados += (d + "\t")
+        
+        desempenhos[index] = dados
+
+        treinos.pop()
+        treinos.append("\n---\n".join(desempenhos))
+
+        conteudo = "\n\n".join(treinos)
+
+
+        file = open("Sistema de Treinos.txt", "w")
+        file.write(conteudo)
+        file.close()
+        
+    # ====================== LOOP PRINCIPAL =========================
+
+    print("EXERCICIOS e Controle de Desempenho\n")
+
+    cmd = "S"
+    while True:
+        if cmd == "S":
+            nome = input("Digite o nome do exercício que deseja adicionar/atualizar: ").upper()
+
+            add(nome)
+        elif cmd == "N":
+            salvarmatriz()
+            print("Encerrando programa...")
+            break
+        else:
+            print("comando não reconhecido.")
+        cmd = input("Deseja continuar? (S/N) ").upper()
+
 def clear():
     OS = platform.system()
     if OS == "Darwin":
@@ -19,7 +139,8 @@ while True:
       "[2] Visualizar\n"
       "[3] Editar\n"
       "[4] Excluir\n"
-      "[5] Parar \n"
+      "[5] Controle e Desempenho\n"
+      "[6] Parar \n"
       "\nRESPOSTA: ")
     
     clear()
@@ -248,8 +369,11 @@ while True:
         treino.close()
         print("Treino Excluído Com Sucesso!\n\n")
         
-
     elif opcao_escolhida == "5":
+        treinoCD = input("Digite um treino para adicionar um desempenho: ")
+        controledesempenho(treinoCD)
+
+    elif opcao_escolhida == "6":
         print("Programa Finalizado!")
         break
     
