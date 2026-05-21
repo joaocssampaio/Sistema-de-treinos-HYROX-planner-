@@ -1,3 +1,4 @@
+#joao carlos teve aqui
 import os 
 os.system("clear")
 import platform
