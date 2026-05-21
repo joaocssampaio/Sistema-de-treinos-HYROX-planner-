@@ -1,3 +1,4 @@
+#teste teste bom dia
 import os 
 os.system("clear")
 import platform
